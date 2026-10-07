@@ -18,7 +18,10 @@ def encrypt_caesar(plaintext):
 
     Add more implementation details here.
     """
-    raise NotImplementedError  # Your implementation here
+    result = ""
+    for c in plaintext:
+        result += chr((ord(c) + 3) % 256)
+    return result 
 
 
 def decrypt_caesar(ciphertext):
@@ -26,7 +29,10 @@ def decrypt_caesar(ciphertext):
 
     Add more implementation details here.
     """
-    raise NotImplementedError  # Your implementation here
+    result = ""
+    for c in ciphertext:
+        result += chr((ord(c) - 3) % 256)
+    return result 
 
 
 # Vigenere Cipher
