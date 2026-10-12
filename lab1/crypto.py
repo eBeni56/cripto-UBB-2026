@@ -174,17 +174,64 @@ def decrypt_scytale(ciphertext, circumference):
         position = row
         while position < length:
             slots[position] = ciphertext[next_letter]
-            next_letter = next_letter + 1
-            position = position + circumference
+            next_letter += 1
+            position += circumference
 
     result = ""
     for letter in slots:
-        result = result + letter
+        result += letter
 
     return result
 
 def encrypt_railfence(plaintext, num_rails):
-    pass
+    if num_rails == 1:
+        return plaintext
+    if num_rails < 1:
+        return ValueError
+    
+    tmp = 0
+    next = 1
+    index_position = [] #minden karakter indexehez hozza rendeljuk a neki megfelelo sort
+    for _ in plaintext:
+        index_position.append(tmp)
+        tmp += next
+        if tmp == num_rails or tmp == -1:
+            next *= -1
+            tmp += next
+            tmp += next
 
-def decrypt_railfence(cuphertext, num_rails):
-    pass
+    result = ""
+    for current_row in range(num_rails):
+        for index, row in enumerate(index_position):
+            if current_row == row:
+                result += plaintext[index]
+
+    return result
+
+def decrypt_railfence(ciphertext, num_rails):
+    if num_rails == 1:
+        return ciphertext
+    if num_rails < 1:
+        return ValueError
+    
+    tmp = 0
+    next = 1
+    index_position = [] #minden karakter indexehez hozza rendeljuk a neki megfelelo sort
+    for _ in ciphertext:
+        index_position.append(tmp)
+        tmp += next
+        if tmp == num_rails or tmp == -1:
+            next *= -1
+            tmp += next
+            tmp += next
+
+    #ahogy az encryptben kiolvassuk, annak a forditottja alapjan vissza rakjuk a megfelelo indexekre
+    slots = [""] * len(ciphertext)
+    next_letter = 0
+    for current_row in range(num_rails):
+        for index, row in enumerate(index_position):
+            if current_row == row:
+                slots[index] = ciphertext[next_letter]
+                next_letter += 1
+
+    return "".join(slots)
