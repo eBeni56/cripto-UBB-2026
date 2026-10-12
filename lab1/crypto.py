@@ -152,3 +152,39 @@ def decrypt_mh(message, private_key):
     """
     raise NotImplementedError  # Your implementation here
 
+def encrypt_scytale(plaintext, circumference):
+    result = ""
+    for row in range(circumference):
+        position = row 
+        while position < len(plaintext):
+            result = result + plaintext[position]
+            position = position + circumference
+
+    return result
+
+def decrypt_scytale(ciphertext, circumference):
+    length = len(ciphertext)
+
+    slots = []
+    for i in range(length):
+        slots.append("")
+
+    next_letter = 0
+    for row in range(circumference):
+        position = row
+        while position < length:
+            slots[position] = ciphertext[next_letter]
+            next_letter = next_letter + 1
+            position = position + circumference
+
+    result = ""
+    for letter in slots:
+        result = result + letter
+
+    return result
+
+def encrypt_railfence(plaintext, num_rails):
+    pass
+
+def decrypt_railfence(cuphertext, num_rails):
+    pass

@@ -12,7 +12,8 @@ import random
 from crypto import (encrypt_caesar, decrypt_caesar,
                     encrypt_vigenere, decrypt_vigenere,
                     generate_private_key, create_public_key,
-                    encrypt_mh, decrypt_mh)
+                    encrypt_mh, decrypt_mh, encrypt_scytale, 
+                    decrypt_scytale, encrypt_railfence, decrypt_railfence)
 
 
 #############################
@@ -21,7 +22,7 @@ from crypto import (encrypt_caesar, decrypt_caesar,
 
 def get_tool():
     print("* Tool *")
-    return _get_selection("(C)aesar, (V)igenere or (M)erkle-Hellman? ", "CVM")
+    return _get_selection("(C)aesar, (V)igenere, (S)cytale Cipher, (R)ailfence Cipher or (M)erkle-Hellman? ", "CVSRM")
 
 
 def get_action():
@@ -175,9 +176,59 @@ def run_suite():
     commands = {
         'C': run_caesar,         # Caesar Cipher
         'V': run_vigenere,       # Vigenere Cipher
+        'S': run_scytale,
+        'R': run_railfence,
         'M': run_merkle_hellman  # Merkle-Hellman Knapsack Cryptosystem
     }
     commands[tool]()
+
+def get_input_every(binary=False):  #nem tisztitja a bemenetet
+    print("* Input *")
+    choice = _get_selection("(F)ile or (S)tring? ", "FS")
+    if choice == 'S':
+        text = input("Enter a string: ")
+        while not text:
+            text = input("Enter a string: ")
+        if binary:
+            return bytes(text, encoding='utf8')
+        return text
+    else:
+        filename = get_filename()
+        flags = 'r'
+        if binary:
+            flags += 'b'
+        with open(filename, flags) as infile:
+            return infile.read()
+
+def run_scytale():
+    action = get_action()
+    encrypting = action == 'E'
+    data = get_input_every(binary=False)
+    #megmarad a kis/nagybetu/random karakter is
+
+    print("* Transform *")
+    circumference = int(input("Circumference? "))
+
+    print("{}crypting {} using Scytale cipher and circumference {}...".format('En' if encrypting else 'De', data, circumference))
+
+    output = (encrypt_scytale if encrypting else decrypt_scytale)(data, circumference)
+
+    set_output(output)
+
+def run_railfence():
+    action = get_action()
+    encrypting = action == 'E'
+    data = get_input_every(binary=False)
+    #megmarad a kis/nagybetu/random karakter is
+
+    print("* Transform *")
+    num_rails = int(input("Number of rails? "))
+
+    print("{}crypting {} using Railfence cipher and number of rails {}...".format('En' if encrypting else 'De', data, num_rails))
+
+    output = (encrypt_railfence if encrypting else decrypt_railfence)(data,num_rails)
+
+    set_output(output)
 
 
 def main():
