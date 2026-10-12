@@ -13,7 +13,8 @@ from crypto import (encrypt_caesar, decrypt_caesar,
                     encrypt_vigenere, decrypt_vigenere,
                     generate_private_key, create_public_key,
                     encrypt_mh, decrypt_mh, encrypt_scytale, 
-                    decrypt_scytale, encrypt_railfence, decrypt_railfence)
+                    decrypt_scytale, encrypt_railfence, decrypt_railfence,
+                    crack_vigenere, load_dictionary)
 
 
 #############################
@@ -22,7 +23,7 @@ from crypto import (encrypt_caesar, decrypt_caesar,
 
 def get_tool():
     print("* Tool *")
-    return _get_selection("(C)aesar, (V)igenere, (S)cytale Cipher, (R)ailfence Cipher or (M)erkle-Hellman? ", "CVSRM")
+    return _get_selection("(C)aesar, (V)igenere, (S)cytale Cipher, (R)ailfence Cipher, (B)reak Vigenere (M)erkle-Hellman? ", "CVSRBM")
 
 
 def get_action():
@@ -131,6 +132,22 @@ def run_vigenere():
 
     set_output(output)
 
+def run_crack_vigenere():
+    data = clean_vigenere(get_input(binary=False))
+
+    print("* Transform *")
+    print("Breaking {} using Vigenere cipher and the dictionary as possible keys...".format(data))
+
+    keys = list(load_dictionary())
+    result = crack_vigenere(data, keys)
+
+    if result is None:
+        output = "No key from the dictionary gives a valid English text."
+    else:
+        key, plaintext = result
+        output = "Key: {}\nPlaintext: {}".format(key, plaintext)
+
+    set_output(output)
 
 def run_merkle_hellman():
     action = get_action()
@@ -178,6 +195,7 @@ def run_suite():
         'V': run_vigenere,       # Vigenere Cipher
         'S': run_scytale,
         'R': run_railfence,
+        'B': run_crack_vigenere,
         'M': run_merkle_hellman  # Merkle-Hellman Knapsack Cryptosystem
     }
     commands[tool]()

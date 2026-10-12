@@ -235,3 +235,34 @@ def decrypt_railfence(ciphertext, num_rails):
                 next_letter += 1
 
     return "".join(slots)
+
+def load_dictionary(path="usr/share/dict/words.txt"):
+    words = set()
+    f = open(path)
+    for line in f:
+        words.add(line.strip().upper())
+    f.close()
+    return words
+#vissza teriti a dictionaryt mint egy set a konnyu keresesert
+
+def split_into_words(text, words):
+    if text == "":
+        return []
+    
+    for i in range(1, len(text) + 1):
+        first = text[:i]
+        if first in words:
+            rest = split_into_words(text[i:], words)    #ha talaltunk egy szot megprobaljuk felosztani a tobbit
+            if rest is not None:
+                return [first] + rest   #ha lehet akkor megallunk, ha nem akkor tovabb probalkozunk
+    return None
+#ellenorzi h feloszthato-e a szoveg helyes angol szavakra (teljes mertekben)
+
+def crack_vigenere(ciphertext, possible_keys):
+    words = load_dictionary()
+    for key in possible_keys:
+        plaintext = decrypt_vigenere(ciphertext, key.upper())
+        split = split_into_words(plaintext, words)
+        if split is not None:
+            return key, " ".join(split) #ha talaltunk egy helyes megoldast akkor vissza terunk
+    return None
