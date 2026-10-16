@@ -1,14 +1,23 @@
-Name: <YOUR NAME>
-SUNet: <SUNet ID>
+Name: Erseki Benjámin-Dominik
+SUNet: ebim2438
 
 In 1-3 sentences per section, comment on your approach to each of the parts of the assignment. What was your high-level strategy? How did you translate that into code? Did you make use of any Pythonic practices? We want you to reflect on your coding style, and whether you're making full use of the utilities provides.
 
 
 # Caesar Cipher
-
+    Shifts every character with ord/chr modulo 256 so it also works on any character.
 
 # Vigenere Cipher
+    Repeats the keyword to the text length, then shifts each letter by the matching key letter modulo 26.
 
+# Scytale
+    Reads the text with a step of circumference, row by row. Decryption fills a list of slots (slots) in the same order.
 
-# Merkle-Hellman Knapsack Cryptosystem
+# Railfence
+    A list index_position stores the rail of each character, and encryption and decryption both walk it rail by rail.
 
+# Codebreaker
+    A set of dictionary words gives fast lookups, and the recursive split_into_words checks that the whole text splits into valid words.
+
+# Error handling
+    ValueError for invalid keys, circumferences and rail counts. The console validates input before calling the ciphers.

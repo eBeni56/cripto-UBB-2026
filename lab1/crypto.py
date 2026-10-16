@@ -4,8 +4,8 @@ File: crypto.py
 ---------------
 Assignment 1: Cryptography
 Course: CS 41
-Name: <YOUR NAME>
-SUNet: <SUNet ID>
+Name: Erseki Benjamin-Dominik
+SUNet: ebim2438
 
 Replace this with a description of the program.
 """
@@ -42,6 +42,8 @@ def encrypt_vigenere(plaintext, keyword):
 
     Add more implementation details here.
     """
+    if not keyword:
+        raise ValueError("Keyword must not be empty")
     save = keyword
     while len(keyword) < len(plaintext):
         keyword += save
@@ -59,6 +61,8 @@ def decrypt_vigenere(ciphertext, keyword):
 
     Add more implementation details here.
     """
+    if not keyword:
+        raise ValueError("Keyword must not be empty")
     save = keyword
     while len(keyword) < len(ciphertext):
         keyword += save
@@ -153,6 +157,8 @@ def decrypt_mh(message, private_key):
     raise NotImplementedError  # Your implementation here
 
 def encrypt_scytale(plaintext, circumference):
+    if circumference < 1:
+        raise ValueError('Circumference must be at least 1')
     result = ""
     for row in range(circumference):
         position = row 
@@ -163,6 +169,8 @@ def encrypt_scytale(plaintext, circumference):
     return result
 
 def decrypt_scytale(ciphertext, circumference):
+    if circumference < 1:
+        raise ValueError('Circumference must be at least 1')
     length = len(ciphertext)
 
     slots = []
@@ -187,7 +195,7 @@ def encrypt_railfence(plaintext, num_rails):
     if num_rails == 1:
         return plaintext
     if num_rails < 1:
-        return ValueError
+        raise ValueError
     
     tmp = 0
     next = 1
@@ -212,7 +220,7 @@ def decrypt_railfence(ciphertext, num_rails):
     if num_rails == 1:
         return ciphertext
     if num_rails < 1:
-        return ValueError
+        raise ValueError
     
     tmp = 0
     next = 1

@@ -125,6 +125,8 @@ def run_vigenere():
 
     print("* Transform *")
     keyword = clean_vigenere(input("Keyword? "))
+    while not keyword:
+        keyword = clean_vigenere(input("Keyword must contain letters. Keyword? "))
 
     print("{}crypting {} using Vigenere cipher and keyword {}...".format('En' if encrypting else 'De', data, keyword))
 
@@ -225,7 +227,14 @@ def run_scytale():
     #megmarad a kis/nagybetu/random karakter is
 
     print("* Transform *")
-    circumference = int(input("Circumference? "))
+    while True:
+        try:
+            circumference = int(input("Circumference? "))
+            if circumference >= 1:
+                break
+            print("Please enter a number of at least 1.")
+        except ValueError:
+            print("Please enter a whole number.")
 
     print("{}crypting {} using Scytale cipher and circumference {}...".format('En' if encrypting else 'De', data, circumference))
 
@@ -240,7 +249,14 @@ def run_railfence():
     #megmarad a kis/nagybetu/random karakter is
 
     print("* Transform *")
-    num_rails = int(input("Number of rails? "))
+    while True:
+        try:
+            num_rails = int(input("Number of rails? "))
+            if num_rails >= 1:
+                break
+            print("Please enter a number of at least 1.")
+        except ValueError:
+            print("Please enter a whole number.")
 
     print("{}crypting {} using Railfence cipher and number of rails {}...".format('En' if encrypting else 'De', data, num_rails))
 
