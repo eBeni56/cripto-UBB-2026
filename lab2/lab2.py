@@ -179,7 +179,7 @@ def arrayDecoder(n, encode_func, decode_func, key, mode, array, padding, iv=None
 
     return unpad(bytes(result), n, padding)
 
-def teszt(json_fajlnev):
+def configBetolt(json_fajlnev):
     f = open(json_fajlnev, "r", encoding="utf-8")
     cfg = json.load(f)
     f.close()
@@ -203,9 +203,20 @@ def teszt(json_fajlnev):
     else:
         raise ValueError("Ismeretlen algoritmus")
 
+    return n, enc_func, dec_func, key, mode, padding, iv
+
+def encodeWithConfig(array, json_fajlnev):
+    n, enc_func, _, key, mode, padding, iv = configBetolt(json_fajlnev)
+    return arrayEncoder(n, enc_func, key, mode, array, padding, iv)
+
+def decodeWithConfig(array, json_fajlnev):
+    n, enc_func, dec_func, key, mode, padding, iv = configBetolt(json_fajlnev)
+    return arrayDecoder(n, enc_func, dec_func, key, mode, array, padding, iv)
+
+def teszt(json_fajlnev):
     eredeti = b"ajfgp adfpausdh fuas fpaisue pfasdaf sefa espasi  APHS D asd awiD PI Wpdia "
-    titkos = arrayEncoder(n, enc_func, key, mode, eredeti, padding, iv)
-    visszafejtett = arrayDecoder(n, enc_func, dec_func, key, mode, titkos, padding, iv)
+    titkos = encodeWithConfig(eredeti, json_fajlnev)
+    visszafejtett = decodeWithConfig(titkos, json_fajlnev)
     print(json_fajlnev, "-> Sikeres?", eredeti == visszafejtett)
 
 if __name__ == "__main__":
