@@ -5,6 +5,20 @@ from lab2 import (
     encodeWithConfig, decodeWithConfig
 )
 
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad as lib_pad
+
+def test_aes_egyezik_a_konyvtarral():
+    with open("kep.jpg", "rb") as f:
+        eredeti = f.read()
+    kulcs = b"0123456789abcdef"
+    iv = b"fedcba9876543210"
+
+    sajat = arrayEncoder(16, AES128ENCODE, kulcs, "CBC", eredeti, "SF", iv)
+    konyvtari = AES.new(kulcs, AES.MODE_CBC, iv=iv).encrypt(lib_pad(eredeti, 16))
+
+    assert sajat == konyvtari
+
 def test_vigenere_kep():
     with open("kep.jpg", "rb") as f:
         eredeti = f.read()
@@ -42,3 +56,31 @@ def test_json_konfigok():
         titkos = encodeWithConfig(eredeti, fajl)
         visszafejtett = decodeWithConfig(titkos, fajl)
         assert visszafejtett == eredeti
+
+def test_correct_encrypt():
+    with open("kep.jpg", "rb") as f:
+        eredeti = f.read()
+    kulcs = b"0123456789abcdef"
+    iv = b"fedcba9876543210"
+
+    padded = lib_pad(eredeti, 16)
+
+    sajat = arrayEncoder(16, AES128ENCODE, kulcs, "ECB", eredeti, "SF", iv)
+    konyvtari = AES.new(kulcs, AES.MODE_ECB).encrypt(padded)
+    assert sajat == konyvtari
+
+    sajat = arrayEncoder(16, AES128ENCODE, kulcs, "CBC", eredeti, "SF", iv)
+    konyvtari = AES.new(kulcs, AES.MODE_CBC, iv=iv).encrypt(padded)
+    assert sajat == konyvtari
+
+    sajat = arrayEncoder(16, AES128ENCODE, kulcs, "CFB", eredeti, "SF", iv)
+    konyvtari = AES.new(kulcs, AES.MODE_CFB, iv=iv, segment_size=128).encrypt(padded)
+    assert sajat == konyvtari
+
+    sajat = arrayEncoder(16, AES128ENCODE, kulcs, "OFB", eredeti, "SF", iv)
+    konyvtari = AES.new(kulcs, AES.MODE_OFB, iv=iv).encrypt(padded)
+    assert sajat == konyvtari
+
+    sajat = arrayEncoder(16, AES128ENCODE, kulcs, "CTR", eredeti, "SF", iv)
+    konyvtari = AES.new(kulcs, AES.MODE_CTR, nonce=b"", initial_value=iv).encrypt(padded)
+    assert sajat == konyvtari
